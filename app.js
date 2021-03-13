@@ -10,7 +10,7 @@ const path         = require('path');
 const session    = require("express-session");
 const MongoStore = require('connect-mongo')(session);
 const flash      = require("connect-flash");
-    
+const cors = require("cors");    
 
 mongoose
   .connect(process.env.DB, {useNewUrlParser: true})
@@ -32,6 +32,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(
+  cors({
+    origin:['https://ironfood2.herokuapp.com', 'http://localhost:3000'],
+    credentials: true,
+  })
+)
 
 // Enable authentication using session + passport
 app.use(session({

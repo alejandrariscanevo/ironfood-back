@@ -5,7 +5,7 @@ const recipeSchema = new mongoose.Schema({
   readyInMinutes: { type: String },
   servings: { type: String, required: true },
   title: { type: String, required: true, unique: true },
-  image:{ type: String, default: 'https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_960_7' },
+  image:{ type: String, default: 'https://res.cloudinary.com/djbctmfeq/image/upload/v1615613731/anna-pelzer-IGfIGP5ONV0-unsplash_mxnefd.jpg' },
   sourceUrl: { type: String },
   description: { type: String },
   _user: {
