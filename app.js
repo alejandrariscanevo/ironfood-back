@@ -13,7 +13,7 @@ const flash      = require("connect-flash");
     
 
 mongoose
-  .connect('mongodb://localhost/backend', {useNewUrlParser: true})
+  .connect(process.env.DB, {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -31,7 +31,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-
+app.use(express.static(path.join(__dirname, 'public')))
 
 // Enable authentication using session + passport
 app.use(session({
@@ -44,11 +44,15 @@ app.use(flash());
 require('./passport')(app);
     
 
-const index = require('./routes/index');
-app.use('/', index);
+const index = require('./routers/index');
+app.use('/api', index);
 
-const authRoutes = require('./routes/auth');
-app.use('/auth', authRoutes);
-      
-
+const authRoutes = require('./routers/auth');
+app.use('/api/auth', authRoutes);
+ 
+const recipeRoutes = require('./routers/recipes');
+app.use('/api/recipes', recipeRoutes)
+app.use('*', (req, res) => {
+res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
 module.exports = app;

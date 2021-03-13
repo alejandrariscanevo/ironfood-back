@@ -15,16 +15,19 @@ const clearRes = data => {
   return cleanedData
 }
 
-router.post("/login", passport.authenticate("local", (error, user, errDetails) => {
-  if (error) return res.status(500).json({ message: errDetails })
-  if (!user) return res.status(401).json({ message: "Unauthorized" })
-
-  req.login(user, error => {
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", (error, user, errDetails) => {
     if (error) return res.status(500).json({ message: errDetails })
-    const usr = clearRes(user.toObject())
-    res.status(200).json(usr)
-  })
-})(req, res, next));
+    if (!user) return res.status(401).json({ message: "Unauthorized" })
+  
+    req.login(user, error => {
+      if (error) return res.status(500).json({ message: errDetails })
+      const usr = clearRes(user.toObject())
+      res.status(200).json(usr)
+    })
+  })(req, res, next)
+
+})
 
 
 router.post("/signup", (req, res, next) => {
